@@ -37,25 +37,17 @@ io.on("connection", (socket) => {
         socket.join(room);
         console.log("New Used Joined")
     });
+
     socket.on("typing", room => socket.in(room).emit("typing"));
     socket.on("stop typing", room => socket.in(room).emit("stop typing"));
     socket.on("notification received", room => socket.in(room).emit("notification received"));
     
     
-    socket.on("new message", newMessage => {
-        var chat = newMessage.chat;
-
-        if(!chat.users) return console.log("Chat.users is not defined");
-        if((newMessage.content).substring(0, 4) == "<div") {
-            var lastObject = (newMessage.content).indexOf('<i class="far fa-external-link-square-alt') - 1;
-            var firstObject = (newMessage.content).indexOf('">') + 2;
-            newMessage.content = (newMessage.content).substring(firstObject, lastObject);
-        }
-
-        chat.users.forEach(user => {
-            if(user._id == newMessage.sender._id) return;
-            socket.in(user._id).emit("message received", newMessage);
-        })
+    socket.on("new message", (newMessage, room, user) => {
+        console.log(newMessage)
+        let message = newMessage;
+        let name = user.name;
+        socket.in(room).emit("new message", message, name);
     });
 
     socket.on("message deleted", (room, id) => socket.in(room).emit("message deleted", id));
