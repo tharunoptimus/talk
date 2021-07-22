@@ -9,7 +9,7 @@ app.use(express.json())
 router.get("/", (req, res, next) => {
     let randomUserId = randomize('Aa0', 10);
     let user = {
-        id: randomUserId,
+        _id: randomUserId,
         name: "John Doe"
     }
 

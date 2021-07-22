@@ -1,10 +1,13 @@
-// var connect = false;
+var connect = false;
 
-// var socket = io(window.location.origin);
-// socket.emit("setup", userLoggedIn);
+var socket = io(window.location.origin);
+socket.emit("setup", user);
 
 
-// socket.on("connected", () => connected = true);
+socket.on("connected", () => {
+    connected = true;
+    console.log("Established web socket successfully")
+});
 // socket.on("message received", (newMessage) => messageReceived(newMessage));
 
 // socket.on("notification received", () => {
@@ -20,4 +23,5 @@
 //     socket.emit("notification received", userId);
 // }
 
-console.log(userId)
+console.log(chatId)
+console.log(user)
