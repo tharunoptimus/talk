@@ -7,6 +7,7 @@ socket.emit("setup", user);
 socket.on("connected", () => {
     connected = true;
     console.log("Established web socket successfully")
+    socket.emit("join room", chatId)
 });
 // socket.on("message received", (newMessage) => messageReceived(newMessage));
 
