@@ -29,9 +29,14 @@ app.use("/", homeRoute);
 app.use("/home", homeRoute);
 app.use("/chat", chatRoute);
 
+let usersOnline = [];
+
 io.on("connection", (socket) => {
 
-    socket.on("setup", userData => { socket.join(userData._id); socket.emit("connected"); })
+    socket.on("setup", userData => { 
+        socket.join(userData._id); 
+        socket.emit("connected");
+    })
 
     socket.on("join room", room => {
         socket.join(room);
@@ -40,7 +45,6 @@ io.on("connection", (socket) => {
 
     socket.on("typing", room => socket.in(room).emit("typing"));
     socket.on("stop typing", room => socket.in(room).emit("stop typing"));
-    socket.on("notification received", room => socket.in(room).emit("notification received"));
     
     
     socket.on("new message", (newMessage, room, user) => {
@@ -50,7 +54,11 @@ io.on("connection", (socket) => {
         socket.in(room).emit("new message", message, name);
     });
 
-    socket.on("message deleted", (room, id) => socket.in(room).emit("message deleted", id));
-    
+    socket.on("people", (room) => {
+        let number = io.sockets.adapter.rooms.get(room)
+        numClients = number ? number.size : 0;
+        console.log(numClients)
+        socket.in(room).emit("number of people", numClients)
+    })
 
-})
+});

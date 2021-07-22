@@ -9,17 +9,24 @@ app.use(express.json())
 
 router.get("/:chatid", (req, res, next) => {
 
-    let randomUserId = randomize('Aa0', 10);
-    let user = {
-        _id: randomUserId,
-        name: "John Doe"
-    }
-
-    var payload = {
+    let payload = {
         pageTitle: "Chat",
-        user: JSON.stringify(user),
         chatid: JSON.stringify(req.params.chatid)
     }
+
+    if(req.session.user === undefined) {
+        let randomUserId = randomize('Aa0', 10);
+        let user = {
+            _id: randomUserId
+        }
+        payload.registered = false;
+        payload.user = JSON.stringify(user);
+    }
+    else {
+        payload.registered = true;
+        payload.user = JSON.stringify(req.session.user);
+    }
+
     res.status(200).render("chat", payload);
 })
 
