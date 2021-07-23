@@ -14,25 +14,42 @@ html(lang="en")
             let user = !{user}
             let isRegistered = !{registered}
         .wrapper
+            .chatDiv
+                .leftPane
+                    h1
+                    span Invite
+                    span Exit
+                .chatDivHolder
+                    .chatPageContainer
+                        .chatTitleBarContainer
+                            span#chatName Chat Id
+                        .mainContentContainer
+                            .chatContainer
+                                .chatMessages
+                                .footer
+                                    textarea#messageTextarea(name='messageInput' placeholder='Type a message...')
+                                    button.sendMessageButton
+                                        i.fal.fa-paper-plane
+                
             
-
-            .registerDiv
-                .registerContentContainer
-                    .registerHeader
-                    .registerContainer
-                        .continueContainer
-                            .continueHeader
-                                p Continue
-                            .logoContainer
-                                img(src='/images/talk.png' alt='Site Logo')
-                            .chatRoomIdContainer
-                                span Chat Room
-                                span abcdefg
-                            .registrationFieldContainer
-                                form(action='/chat/new' method='POST')
-                                    input#userName.namefield(maxlength='15' placeholder='Enter your Name' aria-label='Enter Name' type='text' name='userName')
-                                    button(type='submit') Join
-                    .registerFooter
+            .registerDivContainer
+                .registerDiv
+                    .registerContentContainer
+                        .registerHeader
+                        .registerContainer
+                            .continueContainer
+                                .continueHeader
+                                    p Continue
+                                .logoContainer
+                                    img(src='/images/talk.png' alt='Site Logo')
+                                .chatRoomIdContainer
+                                    span Chat Room
+                                    span !{chatid}
+                                .registrationFieldContainer
+                                    form(action='/chat/new' method='POST')
+                                        input#userName.namefield(maxlength='15' placeholder='Enter your Name' aria-label='Enter Name' type='text' name='userName')
+                                        button(type='submit') Join
+                        .registerFooter
 
 
         script(src='https://code.jquery.com/jquery-3.6.0.min.js' integrity='sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=' crossorigin='anonymous')
