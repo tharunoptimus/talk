@@ -28,11 +28,11 @@ function findPeople() {
 }
 
 socket.on("typing", () => {
-    console.log("Someone is typing")
+    showTypingIndicator();
 })
 
 socket.on("stop typing", () => {
-    console.log("Someone stopped typing")
+    hideTypingIndicator();
 })
 
 socket.on("new message", (message, friend, id) => {

@@ -42,10 +42,15 @@ html(lang="en")
                 .chatDivHolder
                     .chatPageContainer
                         .chatTitleBarContainer
-                            span#chatName Chat Id
+                            span#chatName
                         .mainContentContainer
                             .chatContainer
                                 ul.chatMessages
+                                .typingIndicator
+                                    .typing
+                                        .typingGifHolder
+                                            img(src="/images/typing.gif", alt="Someone is typing")
+                                        span Someone is typing
                                 .footer
                                     textarea#messageTextarea(name='messageInput' placeholder='Type a message...')
                                     button.sendMessageButton

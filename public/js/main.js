@@ -13,6 +13,7 @@ $(document).ready(function () {
         cssMain.type = "text/css";
         document.getElementsByTagName("head")[0].appendChild(cssMain);
     })();
+
     if(isRegistered) {
        $(".registerDivContainer").remove();
        establishConnection();
@@ -21,6 +22,11 @@ $(document).ready(function () {
         $(".chatDiv").remove();
     }
 });
+
+function setChatRoomName() {
+    let html = `Room: ${chatId}`
+    $("#chatName").html(html)
+}
 
 let lastMessageSentBy = "";
 
@@ -67,7 +73,7 @@ function receivedMessage (message, friend, id) {
     
 }
 
-function createChatHtml (value, username, ours) {
+function createChatHtml (value, username, ours, id) {
     let details = "";
     let oursOrTheirs = "theirs";
     let date = getCurrentDateAndTime();
@@ -88,7 +94,7 @@ function createChatHtml (value, username, ours) {
     }
 
     return html = `${details}
-                    <li class='message ${oursOrTheirs}'>
+                    <li class='message ${oursOrTheirs}' data-id='${id}'>
                         <div class='messageContainer'>
                             <span data-date='${date}' class='messageBody'>${value}</span>
                         </div>
@@ -126,3 +132,29 @@ function generateMessageId(length) {
 	}
 	return text;
 }
+
+function showTypingIndicator () {
+    // find whether the div with class .typingIndicator is already shown
+    if($(".typingIndicator").is(":visible")) {
+        return;
+    }
+    else {
+        if($(".typingIndicator").show())
+        setTimeout(function () {
+            $(".typingIndicator").hide();
+        }
+        , 3000);
+    }
+
+    
+}
+
+function hideTypingIndicator () {
+    $(".typingIndicator").hide();
+}
+
+
+setTimeout(function () {
+    setChatRoomName();
+}
+, 1000);
