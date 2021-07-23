@@ -398,8 +398,7 @@ function createJitsiMeetPostHtml(link) {
                 <button style="outline: none;max-width: 7rem;color: #000;border-radius: 1rem;margin: 1rem;padding: 0.5rem;box-shadow: 0 6px 6px rgba(10,16,20,.15), 0 0 52px rgba(10,16,20,.12);border: 1px solid transparent;" onclick="setClipboard('${link}')">
                     <i class="fal fa-copy"></i> Copy Link
                 </button>
-            </div>
-            <a style="outline: none;" data-placement="right" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Warning:" data-content="You're about to access a page which is not maintained by this platform. This platform will be held responsible under no circumstances. Proceed with caution."><i style='box-shadow: 0 6px 6px rgba(10,16,20,.15), 0 0 52px rgba(10,16,20,.12);margin: 0.5rem' class="far fa-exclamation-triangle"></i></a>`
+            </div>`
 }
 
 function mix(iTag, link) {

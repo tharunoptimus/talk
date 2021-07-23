@@ -384,3 +384,20 @@ body, html {
     margin: 1rem auto;
     outline: none;
 }
+
+
+@media (max-width: 480px) { 
+    .statusBar {
+        right: 4vw;
+        max-width: 60vw;
+    }
+    .chatDiv  {
+        width: 100%;
+    }
+    .leftPane {
+        display: none;
+    }
+    .chatTitleBarContainer {
+        background-color: #047af980;
+    }
+ }
