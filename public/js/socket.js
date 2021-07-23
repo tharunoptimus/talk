@@ -1,15 +1,10 @@
 var connect = false;
 var socket = io(window.location.origin);
+
 function establishConnection () {
     if(user.name == undefined) { user.name = "Anonymous" }
     socket.emit("setup", user);
 }
-
-socket.on("connected", () => {
-    connected = true;
-    console.log("Established web socket successfully")
-    socket.emit("join room", chatId, user)
-});
 
 function sendTyping() {
     socket.emit("typing", chatId);
@@ -28,8 +23,16 @@ function findPeople() {
 }
 
 function leaveRoom () {
-    socket.emit("leave room", (chatId, user))
+    socket.emit("leave room", chatId, user)
+    window.location.href = "/";
 }
+
+
+socket.on("connected", () => {
+    connected = true;
+    console.log("Established web socket successfully")
+    socket.emit("join room", chatId, user)
+});
 
 socket.on("new user" , (user) => {
     newUserJoined(user);
@@ -55,21 +58,3 @@ socket.on("friend left", (user) => {
     userLeft(user);
 })
 
-
-// socket.on("message received", (newMessage) => messageReceived(newMessage));
-
-// socket.on("notification received", () => {
-//     $.get("/api/notifications/latest", (notificationData) => {
-//         showNotificationPopup(notificationData)
-//         refreshNotificationsBadge();
-//     })
-// })
-
-// function emitNotification(userId) {
-//     if(userId == userLoggedIn._id) return;
-
-//     socket.emit("notification received", userId);
-// }
-
-console.log(chatId)
-console.log(user)

@@ -55,6 +55,10 @@ $(document).on("click", ".sendMessageButton", function (e) {
     return;
 })
 
+$(document).on("click", "#leave", () => {
+    leaveRoom();
+})
+
 function sendMessage (value) {
     let messageId = generateMessageId(20);
     sendMessageToPeople(value, messageId);
