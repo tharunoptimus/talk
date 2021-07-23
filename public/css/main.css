@@ -172,8 +172,40 @@ body, html {
 
 .chatMessages .message .messageContainer {
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     max-width: 55%;
+    position: relative;
+}
+
+.datetime {
+    display: none;
+    align-items: flex-end;
+    font-size: 0.6rem;
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Images */
+
+.imagePreviewContainer {
+    max-width: 100%;
+    max-height: 50vh;
+}
+
+.sentImageContainer {
+    display: flex;
+    width: 100%;
+}
+
+.sentImageContainer img {
+    width: 100%;
 }
 
 /* Status Bar */

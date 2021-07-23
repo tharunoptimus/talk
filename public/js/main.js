@@ -1,3 +1,5 @@
+var cropper;
+
 $(document).ready(function () {
     (function () {
         var cssFa = document.createElement("link");
@@ -64,6 +66,52 @@ $(document).on("click", "#leave", () => {
     leaveRoom();
 })
 
+$("#sendImageInput").change(function() {
+
+	if(this.files && this.files[0]) {
+		var reader = new FileReader();
+		reader.onload = (e) => {
+			var image = document.getElementById("imagePreview");
+			image.src = e.target.result;
+
+			if(cropper !== undefined) {
+				cropper.destroy();
+			}
+
+			cropper = new Cropper(image, {
+				background: false
+			});
+
+		}
+		reader.readAsDataURL(this.files[0]);
+	}
+})
+
+$("#confirmSendImageButton").click(()=> {
+	var canvas = cropper.getCroppedCanvas();
+
+	if(canvas == null) {
+		return alert("Could not upload the image. Make sure it is an image file.");
+	}
+
+	let imageDataSrc = canvas.toDataURL('image/png');
+    let html = `<i class="fad fa-image"></i><img src='${imageDataSrc}' alt='Send image' class='sentPngImage'>`;
+    sendMessage(html)
+
+})
+
+$(document).on("click", ".message", function (e) {
+    var message = $(this).find(".datetime");
+    if(message.css("display") == "flex") {
+        message.css("display", "none");
+    }
+    else {
+        message.css("display", "flex");
+    }
+});
+
+
+
 function sendMessage (value) {
     let messageId = generateMessageId(20);
     sendMessageToPeople(value, messageId);
@@ -113,12 +161,24 @@ function createChatHtml (value, username, ours, id) {
         requiredMessage = createJitsiMeetPostHtml(link);
     }
 
+    if((value).substring(0,28) == '<i class="fad fa-image"></i>') {
+
+        let imageDataSrc = (value).substring(38, (value).length);
+        imageDataSrc = imageDataSrc.substring(0, imageDataSrc.length - 39);
+
+        requiredMessage = `<div class='sentImageContainer'>
+                            <img src ='${imageDataSrc}' alt='Send image' class='sendPngImage'>
+                        </div>`
+    }
+
 
     return html = `${details}
-                    <li class='message ${oursOrTheirs}' data-id='${id}'>
+                    <li class='message unselectable ${oursOrTheirs}' data-id='${id}'>
                         <div class='messageContainer'>
-                            <span data-date='${date}' class='messageBody'>${requiredMessage}</span>
+                            <span class='messageBody'>${requiredMessage}</span>
+                            <span class='datetime'>${date}</span>
                         </div>
+                        
                     </li>`;
     
 }
@@ -127,13 +187,11 @@ function getCurrentDateAndTime () {
     let date = new Date();
     let hours = date.getHours();
     let minutes = date.getMinutes();
-    let seconds = date.getSeconds();
     let ampm = hours >= 12 ? 'pm' : 'am';
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'
     minutes = minutes < 10 ? '0'+minutes : minutes;
-    seconds = seconds < 10 ? '0'+seconds : seconds;
-    let strTime = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+    let strTime = hours + ':' + minutes + ' ' + ampm;
     return strTime;
 }
 
@@ -197,6 +255,8 @@ function showStatus(html) {
 function replaceURLs(message) {
 	if (!message) return;
 
+    message = htmlEntities(message);
+
 	var urlRegex = /(((https?:\/\/)|(www\.))[^\s]+)/g;
 	return message.replace(urlRegex, function (url) {
 		var hyperlink = url;
@@ -259,3 +319,22 @@ function createJitsiMeetPostHtml(link) {
 function mix(iTag, link) {
     return iTag + " " + link;
 }
+
+function htmlEntities(str) {
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/~/g, '&tilde;');
+}
+
+$(document).on("click", ".sentPngImage", (event) => {
+    var imageURL = $(event.target).attr("src");
+    $("#viewSentImageModal").modal("show");
+    $("#imageView").attr("src", imageURL);
+});
+
+// console.log when the li is double clicked
+$(document).on("dblclick", ".message", function(event) {
+    idToDelete = $(this).data("id");
+    $("#deleteSentMessageModal").modal("show");
+    var html = $(this).find('span.messageBody').html();
+    $("#deleteSentMessageModal .modal-body").html("");
+    $("#deleteSentMessageModal .modal-body").append(html);
+})

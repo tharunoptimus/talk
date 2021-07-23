@@ -1,0 +1,27 @@
+mixin sendImageModal()
+    #sendImageModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='sendImageModalLabel' aria-hidden='true', style="padding-right: 0")
+        .modal-dialog(role='document')
+            .modal-content
+                .modal-header
+                    h5#sendImageModalLabel.modal-title Crop Image
+                .modal-body
+                    span Experimental - Connection gets interrupted if sent image is more than 100 KB
+                    br 
+                    input#sendImageInput(type="file", name="sendImageInput", accept="image/*")
+
+                    .imagePreviewContainer
+                        img#imagePreview
+                .modal-footer
+                    button.btn.btn-secondary(type='button' data-dismiss='modal') Cancel
+                    button#confirmSendImageButton.btn.btn-primary(type='button') Send
+
+mixin viewSentImageModal()
+    #viewSentImageModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='viewSentImageModalLabel' aria-hidden='true', style="padding-right: 0")
+        .modal-dialog.modal-dialog-centered(role='document')
+            .modal-content
+                .modal-header
+                    h5#viewSentImageModalLabel.modal-title View Image
+                .modal-body
+                        img#imageView
+                .modal-footer
+                    button.btn.btn-secondary(type='button' data-dismiss='modal') Close
