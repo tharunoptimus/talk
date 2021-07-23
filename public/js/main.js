@@ -55,6 +55,11 @@ $(document).on("click", ".sendMessageButton", function (e) {
     return;
 })
 
+$(".sendVideoCallRequestButton").click(() => {
+    videoCallRequestSent();
+    return false;
+})
+
 $(document).on("click", "#leave", () => {
     leaveRoom();
 })
@@ -85,7 +90,6 @@ function createChatHtml (value, username, ours, id) {
     let details = "";
     let oursOrTheirs = "theirs";
     let date = getCurrentDateAndTime();
-    let normalMessage = true;
 
     if(ours) {
         oursOrTheirs = "ours";
@@ -102,12 +106,18 @@ function createChatHtml (value, username, ours, id) {
         }
     }
 
-    value = normalMessage ? replaceURLs(value) : value;
+    let requiredMessage = replaceURLs(value);
+
+    if((value).substring(0,33) == '<i class="fal fa-video-plus"></i>') {
+        var link = (value).substring(34, (value).length);
+        requiredMessage = createJitsiMeetPostHtml(link);
+    }
+
 
     return html = `${details}
                     <li class='message ${oursOrTheirs}' data-id='${id}'>
                         <div class='messageContainer'>
-                            <span data-date='${date}' class='messageBody'>${value}</span>
+                            <span data-date='${date}' class='messageBody'>${requiredMessage}</span>
                         </div>
                     </li>`;
     
@@ -201,4 +211,51 @@ function replaceURLs(message) {
 			" <i class='far fa-external-link-square-alt urlLink'></i> </a>"
 		);
 	});
+}
+
+function videoCallRequestSent() {
+
+    var href = createJitsiMeetLinkUrl();
+    var iTag = '<i class="fal fa-video-plus"></i>';
+    var content = mix(iTag, href);
+    sendMessage(content);
+    socket.emit("stop typing", chatId);
+    typing = false;
+    window.open(href, '_blank');
+
+}
+
+function setClipboard(value) {
+    var tempInput = document.createElement("input");
+    tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+    tempInput.value = value;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+}
+
+function createJitsiMeetLinkUrl(users) {
+    var linkUrl = chatId;
+    return getJitsiMeetLink(linkUrl);
+}
+
+function getJitsiMeetLink(linkUrl) {
+    return "https://meet.jit.si/" + linkUrl;
+}
+
+function createJitsiMeetPostHtml(link) {
+
+    return `<div style='border: 3px solid transparent; display: flex; flex-direction: column; align-items:center'>
+                <p style='font-size: 1rem;font-weight: 500;'>You're invited to a Jitsi Meet!</p>
+                <a target='_blank' style='text-decoration: underline' href="${link}">${link.substring(8, link.length)} <i class="far fa-external-link-square-alt urlLink"></i></a>
+                <button style="outline: none;max-width: 7rem;color: #000;border-radius: 1rem;margin: 1rem;padding: 0.5rem;box-shadow: 0 6px 6px rgba(10,16,20,.15), 0 0 52px rgba(10,16,20,.12);border: 1px solid transparent;" onclick="setClipboard('${link}')">
+                    <i class="fal fa-copy"></i> Copy Link
+                </button>
+            </div>
+            <a style="outline: none;" data-placement="right" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Warning:" data-content="You're about to access a page which is not maintained by this platform. This platform will be held responsible under no circumstances. Proceed with caution."><i style='box-shadow: 0 6px 6px rgba(10,16,20,.15), 0 0 52px rgba(10,16,20,.12);margin: 0.5rem' class="far fa-exclamation-triangle"></i></a>`
+}
+
+function mix(iTag, link) {
+    return iTag + " " + link;
 }
