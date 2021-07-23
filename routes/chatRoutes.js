@@ -30,6 +30,14 @@ router.get("/:chatid", (req, res, next) => {
     res.status(200).render("chat", payload);
 })
 
+router.post("/create", (req, res, next) => {
+
+    let room = renderRoom(req.body.room);
+
+    let url = `/chat/${room}`
+    return res.redirect(url);
+})
+
 router.post("/new", (req, res, next) => {
 
     let user = {
@@ -47,6 +55,13 @@ router.post("/new", (req, res, next) => {
     
 
 })
+
+function renderRoom (string) {
+    if(string.length < 20 && /^[a-zA-Z0-9 ]+$/.test(string)) {
+        return string.replace(/\s/g, "");
+    }
+    return randomize('Aa', 20);
+}
 
 function renderName(string) {
     if(string.length < 20 && /^[a-zA-Z0-9 ]+$/.test(string)) {
