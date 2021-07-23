@@ -1,7 +1,9 @@
 var connect = false;
 var socket = io(window.location.origin);
-socket.emit("setup", user);
-
+function establishConnection () {
+    if(user.name == undefined) { user.name = "Anonymous" }
+    socket.emit("setup", user);
+}
 
 socket.on("connected", () => {
     connected = true;
@@ -17,8 +19,8 @@ function sendStoppedTyping() {
     socket.emit("stop typing", chatId);
 }
 
-function sendMessageToPeople(message) {
-    socket.emit("new message", message, chatId, user);
+function sendMessageToPeople(message, id) {
+    socket.emit("new message", message, chatId, user, id);
 }
 
 function findPeople() {
@@ -33,8 +35,9 @@ socket.on("stop typing", () => {
     console.log("Someone stopped typing")
 })
 
-socket.on("new message", (message, name) => {
-    receivedMessage(message, name)
+socket.on("new message", (message, friend, id) => {
+    console.log("New Message Received from someone")
+    receivedMessage(message, friend, id)
 })
 
 socket.on("number of people", (numberOfUsers)  => {

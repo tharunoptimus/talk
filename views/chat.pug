@@ -14,24 +14,6 @@ html(lang="en")
             let user = !{user}
             let isRegistered = !{registered}
         .wrapper
-            .chatDiv
-                .leftPane
-                    h1
-                    span Invite
-                    span Exit
-                .chatDivHolder
-                    .chatPageContainer
-                        .chatTitleBarContainer
-                            span#chatName Chat Id
-                        .mainContentContainer
-                            .chatContainer
-                                .chatMessages
-                                .footer
-                                    textarea#messageTextarea(name='messageInput' placeholder='Type a message...')
-                                    button.sendMessageButton
-                                        i.fal.fa-paper-plane
-                
-            
             .registerDivContainer
                 .registerDiv
                     .registerContentContainer
@@ -47,9 +29,30 @@ html(lang="en")
                                     span !{chatid}
                                 .registrationFieldContainer
                                     form(action='/chat/new' method='POST')
-                                        input#userName.namefield(maxlength='15' placeholder='Enter your Name' aria-label='Enter Name' type='text' name='userName')
+                                        input(type="hidden", name="chatid", value=chatid)
+                                        input#userName.namefield(maxlength='15' placeholder='Enter your Name' aria-label='Enter Name' type='text' name='name')
                                         button(type='submit') Join
                         .registerFooter
+
+            .chatDiv
+                .leftPane
+                    h1
+                    span Invite
+                    span Exit
+                .chatDivHolder
+                    .chatPageContainer
+                        .chatTitleBarContainer
+                            span#chatName Chat Id
+                        .mainContentContainer
+                            .chatContainer
+                                ul.chatMessages
+                                .footer
+                                    textarea#messageTextarea(name='messageInput' placeholder='Type a message...')
+                                    button.sendMessageButton
+                                        i.fal.fa-paper-plane
+                
+            
+            
 
 
         script(src='https://code.jquery.com/jquery-3.6.0.min.js' integrity='sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=' crossorigin='anonymous')

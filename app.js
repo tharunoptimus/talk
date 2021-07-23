@@ -3,7 +3,6 @@ const app = express()
 const port = process.env.PORT || 3003;
 const path = require('path')
 const session = require("express-session")
-
 const server = app.listen(port, () => console.log("Server Listening on " + port));
 const io = require("socket.io")(server, { pingTimeOut: 60000 })
 
@@ -40,18 +39,15 @@ io.on("connection", (socket) => {
 
     socket.on("join room", room => {
         socket.join(room);
-        console.log("New Used Joined")
     });
 
     socket.on("typing", room => socket.in(room).emit("typing"));
     socket.on("stop typing", room => socket.in(room).emit("stop typing"));
     
     
-    socket.on("new message", (newMessage, room, user) => {
-        console.log(newMessage)
+    socket.on("new message", (newMessage, room, user, randomMessageNumber) => {
         let message = newMessage;
-        let name = user.name;
-        socket.in(room).emit("new message", message, name);
+        socket.in(room).emit("new message", message, user, randomMessageNumber);
     });
 
     socket.on("people", (room) => {

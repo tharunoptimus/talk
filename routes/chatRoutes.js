@@ -30,5 +30,32 @@ router.get("/:chatid", (req, res, next) => {
     res.status(200).render("chat", payload);
 })
 
+router.post("/new", (req, res, next) => {
+
+    let user = {
+        _id: randomize('Aa0', 10),
+        name: renderName(req.body.name)
+    }
+
+    let chatid = req.body.chatid;
+    chatid = chatid.replace(/[^a-zA-Z0-9]/g, "");
+
+    let url = `/chat/${chatid}`
+
+    req.session.user = user;
+    return res.redirect(url);
+    
+
+})
+
+function renderName(string) {
+    console.log(string)
+    if(string.length < 20 && /^[a-zA-Z0-9 ]+$/.test(string)) {
+        console.log("String after checking: ",string)
+        return string;
+    }
+    return "Anonymous";
+}
+
 
 module.exports = router; 
