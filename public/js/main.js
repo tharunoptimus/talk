@@ -7,6 +7,7 @@ $(document).ready(function () {
             "https://kit-pro.fontawesome.com/releases/v5.12.1/css/pro.min.css";
         cssFa.rel = "stylesheet";
         cssFa.type = "text/css";
+        cssFa.defer = "";
         document.getElementsByTagName("head")[0].appendChild(cssFa);
     
         var cssMain = document.createElement("link");
