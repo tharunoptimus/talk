@@ -37,8 +37,14 @@ html(lang="en")
             .chatDiv
                 .leftPane
                     h1
-                    span Invite
-                    span#leave Leave
+                    .leftPaneLogoContainer
+                        img(src="/images/talk.png", alt="Site Logo")
+                    span#invite
+                        i(class="fal fa-share-alt")
+                        div Invite
+                    span#leave 
+                        i(class="fal fa-sign-out")
+                        div Leave
                 .chatDivHolder
                     .chatPageContainer
                         .chatTitleBarContainer
