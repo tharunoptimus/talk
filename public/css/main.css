@@ -369,4 +369,5 @@ body, html {
     user-select: none;
     max-width: 5rem;
     margin: 1rem auto;
+    outline: none;
 }

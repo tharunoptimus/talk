@@ -34,7 +34,7 @@ html(lang="en")
                                     form(action='/chat/new' method='POST')
                                         input(type="hidden", name="chatid", value=chatid)
                                         input#userName.namefield(maxlength='15' placeholder='Enter your Name' aria-label='Enter Name' type='text' name='name')
-                                        button(type='submit') Join
+                                        button.joinButton(type='submit') Join
                         .registerFooter
 
             .chatDiv
@@ -42,10 +42,10 @@ html(lang="en")
                     h1
                     .leftPaneLogoContainer
                         img(src="/images/talk.png", alt="Site Logo")
-                    span#invite
+                    span#invite.unselectable
                         i(class="fal fa-share-alt")
                         div Invite
-                    span#leave 
+                    span#leave.unselectable
                         i(class="fal fa-sign-out")
                         div Leave
                 .chatDivHolder

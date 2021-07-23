@@ -47,7 +47,6 @@ io.on("connection", (socket) => {
     
     
     socket.on("new message", (newMessage, room, user, randomMessageNumber) => {
-        console.log(newMessage)
         let message = newMessage;
         socket.in(room).emit("new message", message, user, randomMessageNumber);
     });
