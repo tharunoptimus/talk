@@ -19,6 +19,7 @@ $(document).ready(function () {
     if(isRegistered) {
        $(".registerDivContainer").remove();
        establishConnection();
+       welcomeToTalk();
     }
     else {
         $(".chatDiv").remove();
@@ -232,6 +233,11 @@ function showTypingIndicator () {
 
 }
 
+function welcomeToTalk() {
+    let html = `<span class='notification'>Successfully joined the room!</span>`;
+    showStatus(html)
+}
+
 function newUserJoined (user) {
     let html = `<span class='notification'>${user.name} Joined!</span>`;
     showStatus(html);
@@ -352,7 +358,6 @@ function shareRoomLink() {
 				text: "Join the Talk room!",
 				url: window.location.href,
 			})
-			.then(() => console.log("Successful share"))
-			.catch((error) => console.log("Error sharing", error));
+			.catch((error) => alert("Unable to Generate Link. Copy the URL and share it!"));
 	}
 }
