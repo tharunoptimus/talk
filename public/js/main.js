@@ -85,6 +85,7 @@ function createChatHtml (value, username, ours, id) {
     let details = "";
     let oursOrTheirs = "theirs";
     let date = getCurrentDateAndTime();
+    let normalMessage = true;
 
     if(ours) {
         oursOrTheirs = "ours";
@@ -100,6 +101,8 @@ function createChatHtml (value, username, ours, id) {
                         </li>`
         }
     }
+
+    value = normalMessage ? replaceURLs(value) : value;
 
     return html = `${details}
                     <li class='message ${oursOrTheirs}' data-id='${id}'>
@@ -179,4 +182,23 @@ function showStatus(html) {
         element.fadeOut(400);
     }
     , 3000);
+}
+
+function replaceURLs(message) {
+	if (!message) return;
+
+	var urlRegex = /(((https?:\/\/)|(www\.))[^\s]+)/g;
+	return message.replace(urlRegex, function (url) {
+		var hyperlink = url;
+		if (!hyperlink.match("^https?://")) {
+			hyperlink = "http://" + hyperlink;
+		}
+		return (
+			'<a class=\'postLink\' href="' +
+			hyperlink +
+			'" target="_blank" rel="noopener noreferrer">' +
+			url +
+			" <i class='far fa-external-link-square-alt urlLink'></i> </a>"
+		);
+	});
 }
