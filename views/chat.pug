@@ -14,19 +14,26 @@ html(lang="en")
             let user = !{user}
             let isRegistered = !{registered}
         .wrapper
-            .chatDiv
-                .chatPageContainer
-                    .chatTitleBarContainer
-                        span#chatName This is the Chat
-                    .mainContentContainer
-                        .chatContainer
-                            .footer
-                                textarea(name='messageInput' placeholder='Type a message...')
-                                button.sendMessageButton
-                                    i.fal.fa-paper-plane
+            
 
             .registerDiv
-                h1 This is the register div
+                .registerContentContainer
+                    .registerHeader
+                    .registerContainer
+                        .continueContainer
+                            .continueHeader
+                                p Continue
+                            .logoContainer
+                                img(src='/images/talk.png' alt='Site Logo')
+                            .chatRoomIdContainer
+                                span Chat Room
+                                span abcdefg
+                            .registrationFieldContainer
+                                form(action='/chat/new' method='POST')
+                                    input#userName.namefield(maxlength='15' placeholder='Enter your Name' aria-label='Enter Name' type='text' name='userName')
+                                    button(type='submit') Join
+                    .registerFooter
+
 
         script(src='https://code.jquery.com/jquery-3.6.0.min.js' integrity='sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=' crossorigin='anonymous')
         script(src='https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js' integrity='sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo' crossorigin='anonymous')

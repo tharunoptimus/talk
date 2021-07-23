@@ -41,7 +41,7 @@ socket.on("new message", (message, name) => {
 })
 
 socket.on("number of people", (numberOfUsers)  => {
-    console.log(numberOfUsers)
+    console.log("Request send")
 })
 
 

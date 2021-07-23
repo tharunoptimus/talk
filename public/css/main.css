@@ -1,9 +1,126 @@
-
+body, html {
+    min-height: 100%;
+    height: 100%;
+    margin: 0;
+    border: 0;
+}
 
 
 
 /* Chat Page */
 
-.registerDiv, .chatDiv {
-    display: none;
+.wrapper {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Regiatration */
+
+
+.registerDiv .registrationFieldContainer {
+    width: 70%;
+}
+
+.registerDiv .registerContentContainer {
+    display: flex;
+    min-width: 45vw;
+    align-items: center;
+    justify-content: center;
+}
+
+.registerDiv .registerContainer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 1;
+	margin: 1rem auto;
+	padding: 2rem;
+	border: 1px solid #645d5d27;
+}
+
+.registerDiv .continueContainer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+    flex: 1;
+}
+
+.registerDiv .logoContainer {
+	width: 10rem;
+	min-height: 7rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.registerDiv .logoContainer img {
+	width: 100%;
+}
+
+.registerDiv .continueHeader {
+	display: grid;
+	place-items: center;
+}
+
+.registerDiv .continueHeader p {
+    font-size: 1.5rem;
+    color: #1a73e8;
+    margin: 0;
+}
+
+.registerDiv .chatRoomIdContainer {
+	padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.registerDiv .chatRoomIdContainer span {
+	font-size: 1.5rem;
+}
+
+.registerDiv .registrationFieldContainer form {
+	display: flex;
+	flex-direction: column;
+}
+
+.registerDiv .namefield {
+    background-color: transparent;
+    margin: 0;
+    margin-left: 5px;
+    color: rgba(0,0,0,.87);
+    border: 1px solid #5454544d;
+    border-radius: 0.2rem;
+    word-wrap: break-word;
+    outline: 0;
+    display: flex;
+    flex: 100%;
+    -webkit-tap-highlight-color: transparent;
+    height: 34px;
+    font-size: 16px;
+    padding: 0.5rem;
+
+}
+
+.registerDiv .registrationFieldContainer button {
+    margin: 1rem;
+    background-color: #f8f9fa;
+    border: 1px solid #f8f9fa;
+    border-radius: 4px;
+    color: #3c4043;
+    font-size: 14px;
+    margin: 11px 4px;
+    padding: 0 16px;
+    line-height: 27px;
+    height: 36px;
+    min-width: 54px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    max-width: 5rem;
+    margin: 1rem auto;
 }
