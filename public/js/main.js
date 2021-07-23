@@ -110,6 +110,11 @@ $(document).on("click", ".message", function (e) {
     }
 });
 
+// onclicking the span element with id invite do something
+$(document).on("click", "#invite", function (e) {
+    shareRoomLink();
+});
+
 
 
 function sendMessage (value) {
@@ -338,3 +343,16 @@ $(document).on("dblclick", ".message", function(event) {
     $("#deleteSentMessageModal .modal-body").html("");
     $("#deleteSentMessageModal .modal-body").append(html);
 })
+
+function shareRoomLink() {
+	if (navigator.share) {
+		navigator
+			.share({
+				title: "Talk - Disposable Chat Room",
+				text: "Join the Talk room!",
+				url: window.location.href,
+			})
+			.then(() => console.log("Successful share"))
+			.catch((error) => console.log("Error sharing", error));
+	}
+}
