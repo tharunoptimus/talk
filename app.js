@@ -37,8 +37,9 @@ io.on("connection", (socket) => {
         socket.emit("connected");
     })
 
-    socket.on("join room", room => {
+    socket.on("join room", (room, user) => {
         socket.join(room);
+        socket.in(room).emit("new user", user)
     });
 
     socket.on("typing", room => socket.in(room).emit("typing"));
@@ -55,6 +56,10 @@ io.on("connection", (socket) => {
         numClients = number ? number.size : 0;
         console.log(numClients)
         socket.in(room).emit("number of people", numClients)
+    })
+
+    socket.on("leave room", (room, user) => {
+        socket.in(room).emit("friend left", user);
     })
 
 });

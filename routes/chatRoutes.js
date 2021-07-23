@@ -49,9 +49,7 @@ router.post("/new", (req, res, next) => {
 })
 
 function renderName(string) {
-    console.log(string)
     if(string.length < 20 && /^[a-zA-Z0-9 ]+$/.test(string)) {
-        console.log("String after checking: ",string)
         return string;
     }
     return "Anonymous";

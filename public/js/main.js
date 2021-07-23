@@ -23,6 +23,11 @@ $(document).ready(function () {
     }
 });
 
+setTimeout(function () {
+    setChatRoomName();
+}
+, 1000);
+
 function setChatRoomName() {
     let html = `Room: ${chatId}`
     $("#chatName").html(html)
@@ -60,7 +65,6 @@ function sendMessage (value) {
 }
 
 function receivedMessage (message, friend, id) {
-    console.log(friend)
     if(friend.name != user.name) {
         let html = createChatHtml(message, friend.name, false, id)
         $(".chatMessages").append(html);
@@ -146,15 +150,29 @@ function showTypingIndicator () {
         , 3000);
     }
 
-    
+}
+
+function newUserJoined (user) {
+    let html = `<span class='notification'>${user.name} Joined!</span>`;
+    showStatus(html);
+}
+
+function userLeft(user) {
+    let html = `<span class='notification'>${user.name} Left!</span>`;
+    showStatus(html);
 }
 
 function hideTypingIndicator () {
     $(".typingIndicator").hide();
 }
 
+function showStatus(html) {
 
-setTimeout(function () {
-    setChatRoomName();
+    let element = $(html);
+    element.prependTo(".statusBar");
+
+    setTimeout(function () {
+        element.fadeOut(400);
+    }
+    , 3000);
 }
-, 1000);

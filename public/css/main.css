@@ -7,6 +7,7 @@ body, html {
 
 .wrapper {
     height: 100%;
+    position: relative;
 }
 
 
@@ -66,6 +67,7 @@ body, html {
 }
 
 .mainContentContainer {
+    position: relative;
     flex: 1;
     display: flex;
     overflow-y: hidden;
@@ -150,6 +152,29 @@ body, html {
     flex-direction: column;
     max-width: 55%;
 }
+
+/* Status Bar */
+
+.statusBar {
+    position: absolute;
+    top: 1rem;
+    right: 275px;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.notification {
+    background-color: rgb(84 84 84 / 20%);
+    box-shadow: 0 6px 12px 0 rgba(51,51,51,0.1);
+    border: 1px solid #e8f5f9;
+    padding: 0.5rem;
+}
+
+/* Typing */
+
+
 .typingIndicator {
     display: none;
 }

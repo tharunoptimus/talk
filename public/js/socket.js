@@ -8,7 +8,7 @@ function establishConnection () {
 socket.on("connected", () => {
     connected = true;
     console.log("Established web socket successfully")
-    socket.emit("join room", chatId)
+    socket.emit("join room", chatId, user)
 });
 
 function sendTyping() {
@@ -27,6 +27,14 @@ function findPeople() {
     socket.emit("people", chatId);
 }
 
+function leaveRoom () {
+    socket.emit("leave room", (chatId, user))
+}
+
+socket.on("new user" , (user) => {
+    newUserJoined(user);
+})
+
 socket.on("typing", () => {
     showTypingIndicator();
 })
@@ -36,12 +44,15 @@ socket.on("stop typing", () => {
 })
 
 socket.on("new message", (message, friend, id) => {
-    console.log("New Message Received from someone")
     receivedMessage(message, friend, id)
 })
 
 socket.on("number of people", (numberOfUsers)  => {
     console.log("Request send")
+})
+
+socket.on("friend left", (user) => {
+    userLeft(user);
 })
 
 
