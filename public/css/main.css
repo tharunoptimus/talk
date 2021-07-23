@@ -256,7 +256,20 @@ body, html {
     height: 100%;
 }
 
-/* Regiatration */
+/* Replying */
+
+.selectedChatToReply {
+	box-shadow: 0 0 0 3px #f0932b;
+}
+
+.selectedChatToReplyLiElement {
+    background-color: #f0932b1a;
+    border-radius: 1rem;
+}
+
+
+
+/* Registration */
 
 .registerDivContainer {
     height: 100%;

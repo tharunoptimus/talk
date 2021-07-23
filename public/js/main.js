@@ -1,5 +1,5 @@
-var cropper;
-
+let cropper;
+let selectedChatId = "";
 $(document).ready(function () {
     (function () {
         var cssFa = document.createElement("link");
@@ -39,7 +39,7 @@ function setChatRoomName() {
 let lastMessageSentBy = "";
 
 // on keypress on the messageTextarea textarea do something
-$(document).on("keypress", "#messageTextarea", function (e) {
+$(document).on("keydown", "#messageTextarea", function (e) {
     sendTyping();
     var value = $("#messageTextarea").val().trim();
     if(value != "") {
@@ -48,7 +48,23 @@ $(document).on("keypress", "#messageTextarea", function (e) {
             sendMessage(value);
         }
     }
+    else if(e.keyCode === 8 && value == "") {
+        userPressedEscapeKey();
+    }
 })
+
+document.onkeydown = function(evt) {
+    evt = evt || window.event;
+    var isEscape = false;
+    if ("key" in evt) {
+        isEscape = (evt.key === "Escape" || evt.key === "Esc");
+    } else {
+        isEscape = (evt.keyCode === 27);
+    }
+    if (isEscape) {
+        userPressedEscapeKey();
+    }
+};
 
 $(document).on("click", ".sendMessageButton", function (e) {
     var value = $("#messageTextarea").val().trim();
@@ -112,20 +128,54 @@ $(document).on("click", ".message", function (e) {
     }
 });
 
-// onclicking the span element with id invite do something
 $(document).on("click", "#invite", function (e) {
     shareRoomLink();
 });
 
+$(document).on("click", ".showToRepliedChat", (event) => {
+    let messageId = event.target.attributes.messageId.value;
+    console.log(messageId);
+    let messageLiElement = $("li[data-id=" + messageId + "]");
+
+    let container = $(".chatMessages");
+
+    let heightToScroll = container.scrollTop() + messageLiElement.position().top
+    - container.height()/2 + messageLiElement.height()/2;
+    container.animate({ scrollTop: heightToScroll }, "slow");
+
+    let messageBodyElement = messageLiElement.find(".messageBody");
+
+    // Transitions
+    messageBodyElement.addClass("selectedChatToReply");
+    messageLiElement.addClass("selectedChatToReplyLiElement");
+    setTimeout(() => {
+        messageBodyElement.removeClass("selectedChatToReply");
+        messageLiElement.removeClass("selectedChatToReplyLiElement");
+    }, 1000)
+
+})
+
 
 
 function sendMessage (value) {
+    if(selectedChatId != "") {
+        value+=`~id~${selectedChatId}`
+    }
+
     let messageId = generateMessageId(20);
     sendMessageToPeople(value, messageId);
+
     $("#messageTextarea").val("");
     receivedMessage(value, user, messageId);
+    
     lastMessageSentBy = "";
+
     sendStoppedTyping();
+    if(selectedChatId != "") {
+        readyToSend();
+    }
+    
+
 }
 
 function receivedMessage (message, friend, id) {
@@ -145,6 +195,8 @@ function createChatHtml (value, username, ours, id) {
     let details = "";
     let oursOrTheirs = "theirs";
     let date = getCurrentDateAndTime();
+    let appendedString = "~id~";
+    let buttonElement = "";
 
     if(ours) {
         oursOrTheirs = "ours";
@@ -178,11 +230,32 @@ function createChatHtml (value, username, ours, id) {
                         </div>`
     }
 
+    let index = requiredMessage.indexOf(appendedString);
+    if(index != -1) {
+        let starting = value.indexOf(appendedString) + 4;
+        let repliedId = value.substring(starting, value.length);
+        value = value.substring(0, starting - 4);
+        requiredMessage = replaceURLs(value);
+        buttonElement = `<button 
+                            title='Click to see the message which this was replied to.' 
+                            class='showToRepliedChat' 
+                            style='
+                                outline: none;
+                                background-color: transparent;
+                                border: 0;' 
+                            data-id='${repliedId}'
+                            messageid='${repliedId}'
+                        >
+                            <i class="fal fa-comment-dots" style="pointer-events: none;"></i>
+                        </button>`;
+    }
+
+
 
     return html = `${details}
-                    <li class='message unselectable ${oursOrTheirs}' data-id='${id}'>
+                    <li class='message unselectable ${oursOrTheirs}' data-id='${id}' title='Double click to reply'>
                         <div class='messageContainer'>
-                            <span class='messageBody'>${requiredMessage}</span>
+                            <span class='messageBody'>${requiredMessage} ${buttonElement}</span>
                             <span class='datetime'>${date}</span>
                         </div>
                         
@@ -333,7 +406,7 @@ function mix(iTag, link) {
 }
 
 function htmlEntities(str) {
-    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/~/g, '&tilde;');
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
 }
 
 $(document).on("click", ".sentPngImage", (event) => {
@@ -341,15 +414,6 @@ $(document).on("click", ".sentPngImage", (event) => {
     $("#viewSentImageModal").modal("show");
     $("#imageView").attr("src", imageURL);
 });
-
-// console.log when the li is double clicked
-$(document).on("dblclick", ".message", function(event) {
-    idToDelete = $(this).data("id");
-    $("#deleteSentMessageModal").modal("show");
-    var html = $(this).find('span.messageBody').html();
-    $("#deleteSentMessageModal .modal-body").html("");
-    $("#deleteSentMessageModal .modal-body").append(html);
-})
 
 function shareRoomLink() {
 	if (navigator.share) {
@@ -362,3 +426,47 @@ function shareRoomLink() {
 			.catch((error) => alert("Unable to Generate Link. Copy the URL and share it!"));
 	}
 }
+
+function userPressedEscapeKey () {
+    readyToSend();
+    $("#messageTextarea").attr("placeholder", "Type a message...");
+}
+
+function readyToReply() {
+    $("#sendChatButton").removeClass("fa-paper-plane");
+    $("#sendChatButton").addClass("fa-reply");
+
+    $("#messageTextarea").attr("placeholder", "Send a reply...Press Esc or Bckspace to cancel");
+    var messageLiElement = $("li[data-id=" + selectedChatId + "]");
+
+    $("#messageTextarea").css("background-color", "#f0932b1a");
+    
+    var messageBodyElement = messageLiElement.find(".messageBody");
+    messageBodyElement.addClass("selectedChatToReply");
+
+}
+
+function readyToSend() {
+    $("#sendChatButton").removeClass("fa-reply");
+    $("#sendChatButton").addClass("fa-paper-plane");
+
+    var messageLiElement = $("li[data-id=" + selectedChatId + "]");
+    messageLiElement.attr("title", "Double click to reply");
+    messageLiElement.removeClass("selectedChatToReplyLiElement");
+
+    $("#messageTextarea").css("background-color", "#0000000d");
+
+    var messageBodyElement = messageLiElement.find(".messageBody");
+    messageBodyElement.removeClass("selectedChatToReply");
+    selectedChatId = "";
+}
+
+// on double clicking the li element with classname "message" get the data-id of the element
+$(document).on("dblclick", ".message", function(event) {
+    selectedChatId = $(this).attr("data-id");
+    var messageLiElement = $("li[data-id=" + selectedChatId + "]");
+    messageLiElement.attr("title", "Replying to this message. Press Backspace or Esc to cancel.");
+    messageLiElement.addClass("selectedChatToReplyLiElement");
+    $("#messageTextarea").focus();
+    readyToReply();
+});
