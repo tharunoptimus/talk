@@ -98,6 +98,7 @@ $("#confirmSendImageButton").click(()=> {
 	let imageDataSrc = canvas.toDataURL('image/png');
     let html = `<i class="fad fa-image"></i><img src='${imageDataSrc}' alt='Send image' class='sentPngImage'>`;
     sendMessage(html)
+    $("#sendImageModal").modal('hide');
 
 })
 
