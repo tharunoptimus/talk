@@ -1,0 +1,42 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='utf-8')
+        title Talk - A Disposable Private Messenger
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        meta(name="description" content="Talk - A Disposable Private Messenger.")
+        link(rel="shortcut icon", href="/favicon.ico")
+        link(rel="stylesheet", href="/css/home.css")
+    body
+        .bodyWrapper
+            .questionSection
+                p Are you concerned about your conversations being saved?
+                p Are you concerned about disclosing your identify when sending confidential information?
+                p Are you concerned that your pals will take screenshots of your conversation?
+                p If yes, try Talk!
+            .infoSection
+                .logoContainer
+                    img(loading="lazy",src='/images/talk.png' alt='Logo')
+                .mainHeading
+                    p The Disposable Private Messenger
+                .createNow
+                    button.createButton(onclick='window.location.href = "/home"') Create Now
+                p.noAccount No account needed
+            .laptopContainer
+                img(loading="lazy", src='/images/laptop.png' alt='laptop')
+            .infoContainer
+                .subInfoContainerOne
+                    p.infoHeading Designed for Privacy and Simplicity
+                    p Talk was designed with privacy and ease of use in mind. Your message will never be stored. No one knows who you really are or where you are from - only the messages leave the browser.
+                .infoImage
+                    img(loading="lazy",src='/images/infoOne.png' alt='First Info')
+            .infoContainer.two
+                .subInfoContainerOne
+                    p.infoHeading Fast, safe, and packed with features.
+                    p Make an endless number of rooms, send an unlimited number of messages and images, invite anybody, respond to anyone, and much more. Talk is packed with features to improve your private messaging.
+                .infoImage
+                    img(loading="lazy",src='/images/infoTwo.png' alt='First Info')
+            .githubHolder
+                a.github(href='https://github.com/tharunoptimus/talk')
+                    img(loading="lazy",src='/images/github.png' alt='Github')
+            div(style='height: 3vh;')

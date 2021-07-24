@@ -24,9 +24,12 @@ const homeRoute = require("./routes/homeRoutes");
 const chatRoute = require("./routes/chatRoutes");
 
 
-app.use("/", homeRoute);
 app.use("/home", homeRoute);
 app.use("/chat", chatRoute);
+
+app.get("/", (req, res, next) => {
+    res.status(200).render("root");
+});
 
 let usersOnline = [];
 
