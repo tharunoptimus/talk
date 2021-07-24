@@ -66,3 +66,8 @@ io.on("connection", (socket) => {
     })
 
 });
+
+
+app.get('*', function(req, res){
+    res.status(200).render("error");
+});

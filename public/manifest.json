@@ -1,0 +1,17 @@
+{
+    "short_name": "Talk",
+    "name": "Talk Messenger",
+    "description": "A Disposable Private Messenger",
+    "icons": [
+      {
+        "src": "logo512.png",
+        "type": "image/png",
+        "sizes": "512x512",
+        "purpose": "any maskable"
+      }
+    ],
+    "start_url": "/home",
+    "background_color": "#3367D6",
+    "display": "standalone",
+    "theme_color": "#3367D6"
+  }
