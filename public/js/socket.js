@@ -30,7 +30,7 @@ function findPeople() {
 
 function leaveRoom () {
     socket.emit("leave room", chatId, user)
-    window.location.href = "/";
+    window.location.href = "/home";
 }
 
 
