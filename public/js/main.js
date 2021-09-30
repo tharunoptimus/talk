@@ -178,11 +178,11 @@ function sendMessage (value) {
 }
 
 function receivedMessage (message, friend, id) {
-    if(friend.name != user.name) {
+    if(friend._id != user._id) {
         let html = createChatHtml(message, friend.name, false, id)
         $(".chatMessages").append(html);
     }
-    else if(friend.name == user.name) {
+    else if(friend._id == user._id) {
         let html = createChatHtml(message, friend.name, true, id)
         $(".chatMessages").append(html);
     }

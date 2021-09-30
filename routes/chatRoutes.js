@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const router = express.Router();
 const randomize = require('randomatic');
+const cryptoString = require('crypto-string')
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json())
@@ -15,7 +16,7 @@ router.get("/:chatid", (req, res, next) => {
     }
 
     if(req.session.user === undefined) {
-        let randomUserId = randomize('Aa0', 10);
+        let randomUserId = cryptoString(10)
         let user = {
             _id: randomUserId
         }
@@ -57,10 +58,10 @@ router.post("/new", (req, res, next) => {
 })
 
 function renderRoom (string) {
-    if(string.length < 20 && /^[a-zA-Z0-9 ]+$/.test(string)) {
+    if(string.length < 10 && /^[a-zA-Z0-9 ]+$/.test(string)) {
         return string.replace(/\s/g, "");
     }
-    return randomize('Aa', 20);
+    return cryptoString(10)
 }
 
 function renderName(string) {
