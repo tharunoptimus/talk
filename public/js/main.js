@@ -119,15 +119,7 @@ $("#confirmSendImageButton").click(()=> {
 
 })
 
-$(document).on("click", ".message", function (e) {
-    var message = $(this).find(".datetime");
-    if(message.css("display") == "flex") {
-        message.css("display", "none");
-    }
-    else {
-        message.css("display", "flex");
-    }
-});
+
 
 $(document).on("click", "#invite", function (e) {
     shareRoomLink();
@@ -135,7 +127,6 @@ $(document).on("click", "#invite", function (e) {
 
 $(document).on("click", ".showToRepliedChat", (event) => {
     let messageId = event.target.attributes.messageId.value;
-    console.log(messageId);
     let messageLiElement = $("li[data-id=" + messageId + "]");
 
     let container = $(".chatMessages");
@@ -175,6 +166,7 @@ function sendMessage (value) {
     if(selectedChatId != "") {
         readyToSend();
     }
+    $("#messageTextarea").attr("placeholder", "Type a message...");
     
 
 }
@@ -450,6 +442,8 @@ function readyToSend() {
     $("#sendChatButton").removeClass("fa-reply");
     $("#sendChatButton").addClass("fa-paper-plane");
 
+    if(selectedChatId == null || selectedChatId == "") return
+
     var messageLiElement = $("li[data-id=" + selectedChatId + "]");
     messageLiElement.attr("title", "Double click to reply");
     messageLiElement.removeClass("selectedChatToReplyLiElement");
@@ -469,4 +463,14 @@ $(document).on("dblclick", ".message", function(event) {
     messageLiElement.addClass("selectedChatToReplyLiElement");
     $("#messageTextarea").focus();
     readyToReply();
+})
+
+$(document).on("click", ".message", function (e) {
+    var message = $(this).find(".datetime");
+    if(message.css("display") == "flex") {
+        message.css("display", "none");
+    }
+    else {
+        message.css("display", "flex");
+    }
 });
