@@ -457,6 +457,7 @@ function readyToSend() {
 
 // on double clicking the li element with classname "message" get the data-id of the element
 $(document).on("dblclick", ".message", function(event) {
+    if(selectedChatId != "") return;
     selectedChatId = $(this).attr("data-id");
     var messageLiElement = $("li[data-id=" + selectedChatId + "]");
     messageLiElement.attr("title", "Replying to this message. Press Backspace or Esc to cancel.");
