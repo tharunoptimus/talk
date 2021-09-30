@@ -12,7 +12,6 @@
      // URLs of assets to immediately cache
      OFFLINE,
      "/",
-     "/serviceworker.js",
      "/manifest.json",
      "/logo512.png",
      "/favicon.ico",
