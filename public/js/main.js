@@ -17,6 +17,11 @@ $(document).ready(function () {
         document.getElementsByTagName("head")[0].appendChild(cssMain);
     })();
 
+    if(!window.navigator.onLine) {
+        document.querySelector('.noInternetBanner').style.display = 'block'
+        document.querySelector('#messageTextarea').disabled = true
+    }
+
     if(isRegistered) {
        $(".registerDivContainer").remove();
        establishConnection();
@@ -26,6 +31,7 @@ $(document).ready(function () {
         $(".chatDiv").remove();
     }
 });
+window.addEventListener('online', () => window.location.reload());
 
 setTimeout(function () {
     setChatRoomName();
