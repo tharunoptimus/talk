@@ -181,7 +181,37 @@ function receivedMessage (message, friend, id) {
         $(".chatMessages").append(html);
     }
     scrollToBottom();
+
+    if(!visibilityFunction()) playSound()
     
+    
+}
+
+let visibilityFunction = (() => {
+    let stateKey, eventKey, keys = {
+        hidden: "visibilitychange",
+        webkitHidden: "webkitvisibilitychange",
+        mozHidden: "mozvisibilitychange",
+        msHidden: "msvisibilitychange"
+    };
+    for (stateKey in keys) {
+        if (stateKey in document) {
+            eventKey = keys[stateKey];
+            break;
+        }
+    }
+    return function (c) {
+        if (c)
+            document.addEventListener(eventKey, c);
+        return !document[stateKey];
+    };
+})();
+
+let notificationSound = new Audio('/sounds/notification.mp3');
+
+// function to play sound if the user is not in this tab
+function playSound () {
+    notificationSound.play();
 }
 
 function createChatHtml (value, username, ours, id) {
