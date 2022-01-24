@@ -51,10 +51,6 @@ $(document).ready(function () {
 		$(".registerDivContainer").remove()
 		establishConnection()
 		welcomeToTalk()
-        mobilenet.load().then(async model => {
-            // await model.save('indexeddb://my-model')
-            await model.save('downloads://my-model');
-        })
 	} else {
 		$(".chatDiv").remove()
 	}
