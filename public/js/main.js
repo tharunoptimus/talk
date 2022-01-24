@@ -1,7 +1,7 @@
 let cropper;
 let selectedChatId = "";
 let chatDB
-let item
+let userItem
 
 let schemaBuilder = lf.schema.create(chatId, 1);
 
@@ -15,7 +15,7 @@ addPrimaryKey(['id'], true);
 
 schemaBuilder.connect().then(function(db) {
     chatDb = db;
-    item = db.getSchema().table(chatId)
+    userItem = db.getSchema().table(chatId)
 }).then(() => {
     displayFromIndexedDB();
 }).catch(e => console.error(e));
@@ -183,42 +183,65 @@ async function userGenerationForm () {
     let response = await fetch("/chat/keys");
     let keys = await response.json();
 
-    localStorage.setItem("privateKey", keys.private);
-    localStorage.setItem("publicKey", keys.public);
+    let public = keys.public;
+    let private = keys.private;
     
     console.log(keys)
 
+    let sb = lf.schema.create("keys", 1);
+
+    sb.createTable("keys").
+    addColumn('id', lf.Type.INTEGER).
+    addColumn('username', lf.Type.STRING).
+    addColumn('private', lf.Type.STRING).
+    addColumn('public', lf.Type.STRING).
+    addPrimaryKey(['id'], true);
+
+    let userDb
+
+    sb.connect().then(function(db) {
+        userDb = db;
+        userItem = db.getSchema().table("keys")
+        
+    }).then(() => {
+        let row = userItem.createRow({
+            username: user._id,
+            private: private,
+            public: public,
+            timestamp: getCurrentDateAndTime()
+        })
+    
+        userDb.insertOrReplace().into(userItem).values([row]).exec();
+
+        submitForm();
+
+    }).catch(e => console.error(e));
+
+}
+
+function submitForm() {
     let username = document.getElementById("userName")
     let chatIdInput = document.getElementById("chatIdInput")
-
-    let data = {
-        name: username.value,
-        chatid: chatIdInput.value,
-    }
-
-    console.log(data)
 
     let form = document.createElement("form");
     form.setAttribute("method", "POST");
     form.setAttribute("action", "/chat/new");
-
+    
     let input = document.createElement("input");
     input.setAttribute("type", "hidden");
     input.setAttribute("name", "name");
     input.setAttribute("value", username.value);
-
+    
     let input2 = document.createElement("input");
     input2.setAttribute("type", "hidden");
     input2.setAttribute("name", "chatid");
     input2.setAttribute("value", chatIdInput.value);
-
+    
     form.appendChild(input);
     form.appendChild(input2);
-
+    
     document.body.appendChild(form);
     form.submit();
-
-
 }
 
 
@@ -573,18 +596,18 @@ function readyToSend() {
 
 function addToIndexedDB(message, friend, id) {
 
-    let row = item.createRow({
+    let row = userItem.createRow({
         message: message,
         friend: JSON.stringify(friend),
         messageId: id,
         timestamp: getCurrentDateAndTime()
     })
 
-    chatDb.insertOrReplace().into(item).values([row]).exec();
+    chatDb.insertOrReplace().into(userItem).values([row]).exec();
 }
 
 function displayFromIndexedDB() {
-    chatDb.select().from(item).exec().then(e => {
+    chatDb.select().from(userItem).exec().then(e => {
         e.forEach(element => {
             let friend = JSON.parse(element.friend);
             let message = element.message;
