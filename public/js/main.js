@@ -2,8 +2,6 @@ let cropper
 let selectedChatId = ""
 let chatDB
 let userItem
-let imagenetModel
-let toxicityModel
 
 let schemaBuilder = lf.schema.create(chatId, 1)
 
@@ -53,11 +51,24 @@ $(document).ready(function () {
 		$(".registerDivContainer").remove()
 		establishConnection()
 		welcomeToTalk()
-        
+        mobilenet.load().then(async model => {
+            // await model.save('indexeddb://my-model')
+            await model.save('downloads://my-model');
+        })
 	} else {
 		$(".chatDiv").remove()
 	}
 })
+
+
+// function to activate popper
+const activatePopper = () => {
+    $(function(){
+
+        $("[data-toggle=popover]").popover();
+    });
+}
+
 window.addEventListener("online", () => window.location.reload())
 
 setTimeout(function () {
@@ -343,8 +354,9 @@ function createChatHtml(value, username, ours, id, date) {
 		}
 	}
 
+    
 	let requiredMessage = replaceURLs(value)
-
+    
 	if (value.substring(0, 33) == '<i class="fal fa-video-plus"></i>') {
 		var link = value.substring(34, value.length)
 		requiredMessage = createJitsiMeetPostHtml(link)
@@ -355,8 +367,8 @@ function createChatHtml(value, username, ours, id, date) {
 		imageDataSrc = imageDataSrc.substring(0, imageDataSrc.length - 39)
 
 		requiredMessage = `<div class='sentImageContainer'>
-                            <img src ='${imageDataSrc}' alt='Send image' class='sendPngImage'>
-                        </div>`
+        <img src ='${imageDataSrc}' alt='Send image' class='sendPngImage'>
+        </div>`
 	}
 
 	let index = requiredMessage.indexOf(appendedString)
