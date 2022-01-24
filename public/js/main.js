@@ -549,6 +549,7 @@ $(document).on("dblclick", ".message", function(event) {
 })
 
 $(document).on("click", ".message", function (e) {
+    if ($(e.target).is("button")) return;
     var message = $(this).find(".datetime");
     if(message.css("display") == "flex") {
         message.css("display", "none");
