@@ -2,6 +2,7 @@ let cropper
 let selectedChatId = ""
 let chatDB
 let userItem
+let list
 
 let schemaBuilder = lf.schema.create(chatId, 1)
 
@@ -51,19 +52,11 @@ $(document).ready(function () {
 		$(".registerDivContainer").remove()
 		establishConnection()
 		welcomeToTalk()
+        loadList()
 	} else {
 		$(".chatDiv").remove()
 	}
 })
-
-
-// function to activate popper
-const activatePopper = () => {
-    $(function(){
-
-        $("[data-toggle=popover]").popover();
-    });
-}
 
 window.addEventListener("online", () => window.location.reload())
 
@@ -256,6 +249,11 @@ function submitForm() {
 }
 
 function sendMessage(value) {
+
+    if(toxModel.predict(value)) {
+        return alert("You might have used a toxic word in you message! Please refrain from using such words.")
+    }
+
 	if (selectedChatId != "") {
 		value += `~id~${selectedChatId}`
 	}
@@ -599,6 +597,26 @@ function readyToSend() {
 	var messageBodyElement = messageLiElement.find(".messageBody")
 	messageBodyElement.removeClass("selectedChatToReply")
 	selectedChatId = ""
+}
+
+async function loadList() {
+    let stuff = await fetch("../js/stuff.json")
+    let response = await stuff.json()
+    list = response
+}
+
+let toxModel = {
+    predict: (string) => {
+        let elements = string.split(" ")
+        for(let i = 0; i < elements.length; i++) {
+            let element = elements[i]
+            if(list.includes(element.toLowerCase())) {
+                return true
+            }
+        }
+        
+        return false
+    }
 }
 
 function addToIndexedDB(message, friend, id) {
