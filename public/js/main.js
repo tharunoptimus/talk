@@ -1,7 +1,7 @@
 let cropper;
 let selectedChatId = "";
-let chatDB
-let item
+let chatDB = null
+let item = null
 
 let schemaBuilder = lf.schema.create('chats', 1);
 
@@ -16,7 +16,9 @@ addPrimaryKey(['id'], true);
 schemaBuilder.connect().then(function(db) {
     chatDb = db;
     item = db.getSchema().table(chatId)
-
+    
+}).then(() => {
+    displayFromIndexedDB();
 }).catch(e => console.error(e));
 
 $(document).ready(function () {
@@ -255,9 +257,19 @@ function receivedMessage (message, friend, id) {
 
     if(!visibilityFunction()) playSound()
 
-    addToIndexedDB(message, friend, id)
-    
-    
+    addToIndexedDB(message, friend, id)  
+}
+
+function loadMessages(message, friend, id, date) {
+
+    let html = ""
+    if(friend._id != user._id) {
+        html = createChatHtml(message, friend.name, false, id, date)
+    }
+    else if(friend._id == user._id) {
+        html = createChatHtml(message, friend.name, true, id, date)
+    }
+    $(".chatMessages").append(html);
 }
 
 let visibilityFunction = (() => {
@@ -287,10 +299,10 @@ function playSound () {
     notificationSound.play();
 }
 
-function createChatHtml (value, username, ours, id) {
+function createChatHtml (value, username, ours, id, date) {
     let details = "";
     let oursOrTheirs = "theirs";
-    let date = getCurrentDateAndTime();
+    date = date != undefined ? date : getCurrentDateAndTime()
     let appendedString = "~id~";
     let buttonElement = "";
 
@@ -568,6 +580,19 @@ function addToIndexedDB(message, friend, id) {
     })
 
     chatDb.insertOrReplace().into(item).values([row]).exec();
+}
+
+function displayFromIndexedDB() {
+    chatDb.select().from(item).exec().then(e => {
+        e.forEach(element => {
+            let friend = JSON.parse(element.friend);
+            let message = element.message;
+            let id = element.messageId;
+            let timestamp = element.timestamp;
+            loadMessages(message, friend, id, timestamp)
+            scrollToBottom();
+        })
+    })
 }
 
 // on double clicking the li element with classname "message" get the data-id of the element
