@@ -52,7 +52,7 @@ $(document).ready(function () {
 		$(".registerDivContainer").remove()
 		establishConnection()
 		welcomeToTalk()
-        loadList()
+		loadList()
 	} else {
 		$(".chatDiv").remove()
 	}
@@ -249,10 +249,11 @@ function submitForm() {
 }
 
 function sendMessage(value) {
-
-    if(toxModel.predict(value)) {
-        return alert("You might have used a toxic word in you message! Please refrain from using such words.")
-    }
+	if (toxModel.predict(value)) {
+		return alert(
+			"You might have used a toxic word in you message! Please refrain from using such words."
+		)
+	}
 
 	if (selectedChatId != "") {
 		value += `~id~${selectedChatId}`
@@ -348,9 +349,8 @@ function createChatHtml(value, username, ours, id, date) {
 		}
 	}
 
-    
 	let requiredMessage = replaceURLs(value)
-    
+
 	if (value.substring(0, 33) == '<i class="fal fa-video-plus"></i>') {
 		var link = value.substring(34, value.length)
 		requiredMessage = createJitsiMeetPostHtml(link)
@@ -600,23 +600,23 @@ function readyToSend() {
 }
 
 async function loadList() {
-    let stuff = await fetch("../js/stuff.json")
-    let response = await stuff.json()
-    list = response
+	let stuff = await fetch("../js/stuff.json")
+	let response = await stuff.json()
+	list = response
 }
 
 let toxModel = {
-    predict: (string) => {
-        let elements = string.split(" ")
-        for(let i = 0; i < elements.length; i++) {
-            let element = elements[i]
-            if(list.includes(element.toLowerCase())) {
-                return true
-            }
-        }
-        
-        return false
-    }
+	predict: (string) => {
+		let elements = string.split(" ")
+		for (let i = 0; i < elements.length; i++) {
+			let element = elements[i]
+			if (list.includes(element.toLowerCase())) {
+				return true
+			}
+		}
+
+		return false
+	},
 }
 
 function addToIndexedDB(message, friend, id) {
@@ -645,6 +645,40 @@ function displayFromIndexedDB() {
 				scrollToBottom()
 			})
 		})
+}
+
+function getMessageEncoding() {
+	const messageBox = document.querySelector(".aes-ctr #message")
+	let message = messageBox.value
+	let enc = new TextEncoder()
+	return enc.encode(message)
+}
+
+function encryptMessage(key) {
+	let encoded = getMessageEncoding()
+	// counter will be needed for decryption
+	counter = window.crypto.getRandomValues(new Uint8Array(16))
+	return window.crypto.subtle.encrypt(
+		{
+			name: "AES-CTR",
+			counter,
+			length: 64,
+		},
+		key,
+		encoded
+	)
+}
+
+function decryptMessage(key, ciphertext) {
+	return window.crypto.subtle.decrypt(
+		{
+			name: "AES-CTR",
+			counter,
+			length: 64,
+		},
+		key,
+		ciphertext
+	)
 }
 
 // on double clicking the li element with classname "message" get the data-id of the element
