@@ -154,6 +154,52 @@ $(document).on("click", ".showToRepliedChat", (event) => {
 })
 
 
+async function userGenerationForm () {
+
+    let showGenerationMessageParagraphTag = document.querySelector(".registerDiv .registrationFieldContainer p")
+    showGenerationMessageParagraphTag.style.display = "block"
+
+    let response = await fetch("/chat/keys");
+    let keys = await response.json();
+
+    localStorage.setItem("privateKey", keys.private);
+    localStorage.setItem("publicKey", keys.public);
+    
+    console.log(keys)
+
+    let username = document.getElementById("userName")
+    let chatIdInput = document.getElementById("chatIdInput")
+
+    let data = {
+        name: username.value,
+        chatid: chatIdInput.value,
+    }
+
+    console.log(data)
+
+    let form = document.createElement("form");
+    form.setAttribute("method", "POST");
+    form.setAttribute("action", "/chat/new");
+
+    let input = document.createElement("input");
+    input.setAttribute("type", "hidden");
+    input.setAttribute("name", "name");
+    input.setAttribute("value", username.value);
+
+    let input2 = document.createElement("input");
+    input2.setAttribute("type", "hidden");
+    input2.setAttribute("name", "chatid");
+    input2.setAttribute("value", chatIdInput.value);
+
+    form.appendChild(input);
+    form.appendChild(input2);
+
+    document.body.appendChild(form);
+    form.submit();
+
+
+}
+
 
 function sendMessage (value) {
     if(selectedChatId != "") {

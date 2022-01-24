@@ -36,10 +36,13 @@ html(lang="en")
                                     span Chat Room
                                     span !{chatid}
                                 .registrationFieldContainer
-                                    form(action='/chat/new' method='POST')
-                                        input(type="hidden", name="chatid", value=chatid)
+                                    div(action='/chat/new')
+                                        input#chatIdInput(type="hidden", name="chatid", value=chatid)
                                         input#userName.namefield(maxlength='15' placeholder='Enter your Name' aria-label='Enter Name' type='text' name='name')
-                                        button.joinButton(type='submit') Join
+                                        button.joinButton(type='submit', onclick="userGenerationForm()") Join
+                                        p#keyPairGeneration Generating Key Pairs for Encryption in the background &emsp;
+                                            i.fas.fa-spinner.fa-pulse
+
                         .registerFooter
 
             .chatDiv

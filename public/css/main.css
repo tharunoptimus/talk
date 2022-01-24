@@ -298,9 +298,13 @@ html {
 .registerDiv .chatRoomIdContainer span {
 	font-size: 1.5rem;
 }
-.registerDiv .registrationFieldContainer form {
+.registerDiv .registrationFieldContainer div {
 	display: flex;
 	flex-direction: column;
+}
+.registerDiv .registrationFieldContainer p {
+	text-align: center;
+	display: none;
 }
 .registerDiv .namefield {
 	background-color: transparent;
