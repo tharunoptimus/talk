@@ -254,6 +254,8 @@ function receivedMessage (message, friend, id) {
     scrollToBottom();
 
     if(!visibilityFunction()) playSound()
+
+    addToIndexedDB(message, friend, id)
     
     
 }
@@ -554,6 +556,18 @@ function readyToSend() {
     var messageBodyElement = messageLiElement.find(".messageBody");
     messageBodyElement.removeClass("selectedChatToReply");
     selectedChatId = "";
+}
+
+function addToIndexedDB(message, friend, id) {
+
+    let row = item.createRow({
+        message: message,
+        friend: JSON.stringify(friend),
+        messageId: id,
+        timestamp: getCurrentDateAndTime()
+    })
+
+    chatDb.insertOrReplace().into(item).values([row]).exec();
 }
 
 // on double clicking the li element with classname "message" get the data-id of the element
