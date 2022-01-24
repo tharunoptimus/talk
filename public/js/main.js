@@ -1,9 +1,9 @@
 let cropper;
 let selectedChatId = "";
-let chatDB = null
-let item = null
+let chatDB
+let item
 
-let schemaBuilder = lf.schema.create('chats', 1);
+let schemaBuilder = lf.schema.create(chatId, 1);
 
 schemaBuilder.createTable(chatId).
 addColumn('id', lf.Type.INTEGER).
@@ -16,7 +16,6 @@ addPrimaryKey(['id'], true);
 schemaBuilder.connect().then(function(db) {
     chatDb = db;
     item = db.getSchema().table(chatId)
-    
 }).then(() => {
     displayFromIndexedDB();
 }).catch(e => console.error(e));
