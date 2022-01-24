@@ -107,6 +107,7 @@ $(".sendVideoCallRequestButton").click(() => {
 })
 
 $(document).on("click", "#leave", () => {
+    indexedDB.deleteDatabase(chatId)
     leaveRoom();
 })
 
@@ -427,6 +428,7 @@ function newUserJoined (user) {
 function userLeft(user) {
     let html = `<span class='notification'>${user.name} Left!</span>`;
     showStatus(html);
+    indexedDB.deleteDatabase(chatId)
 }
 
 function hideTypingIndicator () {
