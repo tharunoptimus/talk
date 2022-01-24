@@ -1,4 +1,5 @@
 const express = require("express");
+const keypair = require("keypair");
 const app = express();
 const router = express.Router();
 const randomize = require('randomatic');
@@ -7,6 +8,13 @@ const cryptoString = require('crypto-string')
 app.use(express.urlencoded({extended: true}));
 app.use(express.json())
 
+
+router.get("/keys", (_, res) => {
+    
+    let pair = keypair([64])
+    res.status(200).send(pair)
+    
+})
 
 router.get("/:chatid", (req, res, next) => {
 
