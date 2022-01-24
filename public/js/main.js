@@ -1,5 +1,24 @@
 let cropper;
 let selectedChatId = "";
+let chatDB
+let item
+
+let schemaBuilder = lf.schema.create('chats', 1);
+
+schemaBuilder.createTable(chatId).
+addColumn('id', lf.Type.INTEGER).
+addColumn('message', lf.Type.STRING).
+addColumn('friend', lf.Type.STRING).
+addColumn('messageId', lf.Type.STRING).
+addColumn('timestamp', lf.Type.STRING).
+addPrimaryKey(['id'], true);
+
+schemaBuilder.connect().then(function(db) {
+    chatDb = db;
+    item = db.getSchema().table(chatId)
+
+}).catch(e => console.error(e));
+
 $(document).ready(function () {
     (function () {
         var cssFa = document.createElement("link");
