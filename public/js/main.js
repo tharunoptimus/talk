@@ -603,32 +603,31 @@ let toxModel = {
 	},
 }
 
-function addToIndexedDB(message, friend, id) {
-	let row = userItem.createRow({
-		message: message,
-		friend: JSON.stringify(friend),
-		messageId: id,
-		timestamp: getCurrentDateAndTime(),
-	})
-
-	chatDb.insertOrReplace().into(userItem).values([row]).exec()
+async function addToIndexedDB(message, friend, id) {
+	let data = { message, friend, id }
+	let history = await localforage.getItem(chatId)
+	if (history == null) history = []
+	history.push(data)
+	return await localforage.setItem(chatId, history)
 }
 
-function displayFromIndexedDB() {
-	chatDb
-		.select()
-		.from(userItem)
-		.exec()
-		.then((e) => {
-			e.forEach((element) => {
-				let friend = JSON.parse(element.friend)
-				let message = element.message
-				let id = element.messageId
-				let timestamp = element.timestamp
-				loadMessages(message, friend, id, timestamp)
-				scrollToBottom()
-			})
-		})
+async function getDataFromIDB() {
+	let history = await localforage.getItem(chatId)
+	if (history == null) history = []
+	console.log(history)
+	return history
+}
+
+async function displayFromIndexedDB() {
+	let data = await getDataFromIDB()
+	data.forEach((element) => {
+		let friend = element.friend
+		let message = element.message
+		let id = element.id
+		let timestamp = element.timestamp
+		loadMessages(message, friend, id, timestamp)
+		scrollToBottom()
+	})
 }
 
 function getMessageEncoding() {
