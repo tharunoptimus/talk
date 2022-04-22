@@ -190,37 +190,21 @@ async function userGenerationForm() {
 	let public = keys.public
 	let private = keys.private
 
-	console.log(keys)
+	console.log(`Your Keys: ${keys}`)
 
-	let sb = lf.schema.create("keys", 1)
+	let data = {
+		username : user._id,
+		private,
+		public,
+		timestamp: getCurrentDateAndTime()
+	}
 
-	sb.createTable("keys")
-		.addColumn("id", lf.Type.INTEGER)
-		.addColumn("username", lf.Type.STRING)
-		.addColumn("private", lf.Type.STRING)
-		.addColumn("public", lf.Type.STRING)
-		.addPrimaryKey(["id"], true)
+	await addKeyToIDB(data)
+	submitForm()
+}
 
-	let userDb
-
-	sb.connect()
-		.then(function (db) {
-			userDb = db
-			userItem = db.getSchema().table("keys")
-		})
-		.then(() => {
-			let row = userItem.createRow({
-				username: user._id,
-				private: private,
-				public: public,
-				timestamp: getCurrentDateAndTime(),
-			})
-
-			userDb.insertOrReplace().into(userItem).values([row]).exec()
-
-			submitForm()
-		})
-		.catch((e) => console.error(e))
+async function addKeyToIDB(data) {
+	await localforage.setItem("keys", data)
 }
 
 function submitForm() {
