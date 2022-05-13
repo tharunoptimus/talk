@@ -21,7 +21,7 @@ html(lang="en")
             let isRegistered = !{registered}
         .noInternetBanner
             .noInternetInfo
-                span You're not connected to the internet
+                span You're connected to the internet
         .wrapper
             .registerDivContainer
                 .registerDiv
@@ -33,7 +33,7 @@ html(lang="en")
                                     p Continue
                                 .logoContainer
                                     a(href="/home")
-                                        img(src='/images/talk.png' alt='Site Logo')
+                                        img(src='/images/talk.png' alt='Site Logo', height="100")
                                 .chatRoomIdContainer
                                     span Chat Room
                                     span !{chatid}
@@ -42,8 +42,7 @@ html(lang="en")
                                         input#chatIdInput(type="hidden", name="chatid", value=chatid)
                                         input#userName.namefield(maxlength='15' placeholder='Enter your Name' aria-label='Enter Name' type='text' name='name')
                                         button.joinButton(type='submit', onclick="userGenerationForm()") Join
-                                        p#keyPairGeneration Generating Key Pairs for Encryption &nbsp;
-                                            i.fas.fa-spinner.fa-pulse
+                                        p#keyPairGeneration  &nbsp;
 
                         .registerFooter
 
@@ -51,11 +50,11 @@ html(lang="en")
                 .leftPane
                     h1
                     .leftPaneLogoContainer
-                        img(src="/images/talk.png", alt="Site Logo")
-                    span#invite.unselectable
+                        img(src="/images/talk.png", alt="Site Logo", height="100")
+                    span#invite.unselectable(style="display: none;")
                         i(class="fal fa-share-alt")
                         div Invite
-                    span#leave.unselectable
+                    span#leave.unselectable(style="display: none;")
                         i(class="fal fa-sign-out")
                         div Leave
                 .chatDivHolder
@@ -68,8 +67,8 @@ html(lang="en")
                                 .typingIndicator
                                     .typing
                                         .typingGifHolder
-                                            img(src="/images/typing.gif", alt="Someone is typing")
-                                        span Someone is typing
+                                            img(src="/images/typing.gif", alt="Someone is typing", height="0")
+                                        span
                                 .footer
                                     button.sendImageButton(aria-label="Send Image", data-toggle="modal", data-target="#sendImageModal")
                                         i.fal.fa-camera-alt
