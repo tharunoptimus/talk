@@ -42,6 +42,7 @@ socket.on("connected", () => {
 
 socket.on("new user" , (user) => {
     newUserJoined(user);
+    console.log("WebRTC is established with " + user)
 })
 
 socket.on("typing", () => {
