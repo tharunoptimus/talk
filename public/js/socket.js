@@ -37,6 +37,7 @@ function leaveRoom () {
 socket.on("connected", () => {
     connected = true;
     console.log("Established web socket successfully")
+    console.log("AXE is now Online!")
     socket.emit("join room", chatId, user)
 });
 
